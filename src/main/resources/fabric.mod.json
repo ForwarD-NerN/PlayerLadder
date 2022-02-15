@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "pladder",
+  "version": "0.1.0",
+
+  "name": "Player Ladder",
+  "description": "Allows you to sit on other players",
+  "authors": [
+    "ForwarD NerN"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/pladder/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "ru.nern.pladder.PLadder"
+    ]
+  },
+  "mixins": [
+    "pladder.mixins.json"
+  ],
+
+  "depends": {
+    "fabric": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
