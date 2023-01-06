@@ -37,13 +37,14 @@ public class EntityMixin
 	private double getMountedHeightOffset(Entity entity)
 	{
 		if(!entity.world.isClient) return entity.getMountedHeightOffset();
-		return isFirstPerson() ? dimensions.height * 0.93 : entity.getMountedHeightOffset();
+		return isClientPassenger(entity) ? dimensions.height * 0.93 : entity.getMountedHeightOffset();
 	}
 
 	@Environment(EnvType.CLIENT)
-	private boolean isFirstPerson()
+	private boolean isClientPassenger(Entity entity)
 	{
-		return MinecraftClient.getInstance().options.getPerspective() == Perspective.FIRST_PERSON;
+		return MinecraftClient.getInstance().options.getPerspective() == Perspective.FIRST_PERSON
+				&& MinecraftClient.getInstance().player.getFirstPassenger() != null && MinecraftClient.getInstance().player == entity;
 	}
 
 	@Inject(method = "setSneaking", at = @At("HEAD"))
