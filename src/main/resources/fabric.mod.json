@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "id": "pladder",
-  "version": "0.4.0",
+  "id": "playerllader",
+  "version": "${version}",
 
   "name": "Player Ladder",
   "description": "Allows you to sit on other players",
@@ -9,25 +9,27 @@
     "ForwarD NerN"
   ],
   "contact": {
-    "homepage": "",
-    "sources": ""
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/pladder/icon.png",
+  "icon": "assets/playerladder/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "ru.nern.pladder.PLadder"
+      "ru.nern.playerladder.PlayerLadder"
     ]
   },
   "mixins": [
-    "pladder.mixins.json"
+    "playerladder.mixins.json"
   ],
 
   "depends": {
-    "fabric": "*"
+    "minecraft": ">=1.19.4",
+    "fabric": "*",
+    "java": ">=17"
   },
   "suggests": {
     "another-mod": "*"
