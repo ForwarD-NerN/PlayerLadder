@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "playerllader",
+  "id": "playerladder",
   "version": "${version}",
 
   "name": "Player Ladder",
@@ -9,8 +9,8 @@
     "ForwarD NerN"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "",
+    "sources": "https://github.com/ForwarD-NerN/PlayerLadder"
   },
 
   "license": "CC0-1.0",
