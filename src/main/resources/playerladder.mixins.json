@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "ru.nern.playerladder.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "EntityMixin",
+    "RideCommandMixin",
+    "PlayerMixin"
+  ],
+  "minVersion": "0.8",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "playerladder.refmap.json"
+}
