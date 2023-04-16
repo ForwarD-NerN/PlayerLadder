@@ -1,16 +1,15 @@
 {
   "required": true,
-  "minVersion": "0.8",
-  "package": "ru.nern.pladder.mixin",
+  "package": "ru.nern.playerladder.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "EntityMixin",
     "LivingEntityMixin",
-    "ServerPlayerEntityMixin",
-    "ServerPlayNetworkHandlerMixin"
+    "PlayerMixin"
   ],
-  "client": [],
+  "minVersion": "0.8",
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "refmap": "playerladder.refmap.json"
 }
