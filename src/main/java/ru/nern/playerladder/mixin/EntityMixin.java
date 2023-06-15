@@ -28,14 +28,14 @@ public abstract class EntityMixin
     {
         Entity entity = (Entity) (Object) this;
 
-        if(!entity.world.isClient && entity instanceof PlayerEntity)
+        if(!entity.getWorld().isClient && entity instanceof PlayerEntity)
             ((ServerPlayerEntity) entity).networkHandler.sendPacket(new EntityPassengersSetS2CPacket(entity));
     }
 
     @Inject(method = "startRiding(Lnet/minecraft/entity/Entity;Z)Z", at = @At("TAIL"))
     private void onStartRiding(Entity entity, boolean force, CallbackInfoReturnable<Boolean> cir)
     {
-        if(!entity.world.isClient && entity instanceof PlayerEntity)
+        if(!entity.getWorld().isClient && entity instanceof PlayerEntity)
             ((ServerPlayerEntity)entity).networkHandler.sendPacket(new EntityPassengersSetS2CPacket(entity));
     }
 

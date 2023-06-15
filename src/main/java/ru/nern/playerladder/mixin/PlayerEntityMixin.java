@@ -15,7 +15,7 @@ public class PlayerEntityMixin
     {
         PlayerEntity entity = (PlayerEntity) (Object) this;
 
-        if(!entity.world.isClient && entity.hasPassengers() && entity.isSneaking() && entity.isOnGround())
+        if(!entity.getWorld().isClient && entity.hasPassengers() && entity.isSneaking() && entity.isOnGround())
             entity.getFirstPassenger().stopRiding();
     }
 }
