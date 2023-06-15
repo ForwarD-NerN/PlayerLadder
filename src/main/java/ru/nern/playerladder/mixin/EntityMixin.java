@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -23,18 +24,8 @@ import javax.annotation.Nullable;
 public abstract class EntityMixin
 {
 
-    @Shadow public Level level;
 
-    @Shadow public abstract boolean hasPassenger(Entity p_20364_);
-
-    @Shadow public abstract double getY();
-
-    @Shadow public abstract double getX();
-
-    @Shadow public abstract double getZ();
-
-    @Shadow public abstract double getPassengersRidingOffset();
-
+    @Shadow public abstract Level getLevel();
 
     @Inject(method = "removePassenger", at = @At("TAIL"))
     private void removePassenger(Entity passenger, CallbackInfo ci)
@@ -42,7 +33,7 @@ public abstract class EntityMixin
         Entity entity = (Entity) (Object) this;
 
 
-        if(!entity.level.isClientSide && entity instanceof Player && passenger instanceof Player)
+        if(!entity.level.isClientSide && entity instanceof Player)
             ((ServerPlayer) entity).connection.send(new ClientboundSetPassengersPacket(entity));
     }
 
@@ -57,30 +48,15 @@ public abstract class EntityMixin
         }
     }
 
-    /**
-     * @author ForwarD_NerN
-     * @reason To make passengers sit a little higher in first person
-     */
-    @Overwrite
-    private void positionRider(Entity passenger, Entity.MoveFunction positionUpdater) {
-        if (!this.hasPassenger(passenger)) return;
-
-        double d = this.getY() + this.getPassengersRidingOffset() + passenger.getMyRidingOffset();
-
-        if(level.isClientSide)
-            d = getDOffset(passenger);
-
-
-        positionUpdater.accept(passenger, this.getX(), d, this.getZ());
+    @ModifyVariable(method = "positionRider(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity$MoveFunction;)V",
+            at = @At(value = "STORE"), ordinal = 0, require = 0)
+    private double offsetPassengersClientSide(double d, Entity passenger) {
+        return getLevel().isClientSide && passenger instanceof Player ? d-getRidingOffset(passenger) : d;
     }
-
     @OnlyIn(Dist.CLIENT)
-    private double getDOffset(Entity passenger)
+    private double getRidingOffset(Entity passenger)
     {
         Minecraft mc = Minecraft.getInstance();
-        if(mc.options.getCameraType().isFirstPerson() && passenger instanceof Player && passenger.getVehicle() == mc.player)
-            return this.getY() + this.getPassengersRidingOffset();
-
-        return this.getY() + this.getPassengersRidingOffset() + passenger.getMyRidingOffset();
+        return mc.options.getCameraType().isFirstPerson() && passenger.getVehicle() == mc.player ? passenger.getMyRidingOffset() : 0;
     }
 }

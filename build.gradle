@@ -36,7 +36,7 @@ plugins {
 
  */
 
-version = 'forge-1.19.4-0.5.0'
+version = '0.6.0-forge-1.19.4'
 group = 'ru.nern.playerladder' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'playerladder'
 
