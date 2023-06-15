@@ -13,31 +13,22 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin
 {
-    @Shadow public abstract boolean hasPassenger(Entity passenger);
 
-    @Shadow public abstract double getMountedHeightOffset();
-
-    @Shadow public abstract double getY();
-
-    @Shadow public abstract double getX();
-
-    @Shadow public abstract double getZ();
-
-    @Shadow public World world;
+    @Shadow public abstract World getWorld();
 
     @Inject(method = "removePassenger", at = @At("TAIL"))
     private void onRemovePassenger(Entity passenger, CallbackInfo callbackInfo)
     {
         Entity entity = (Entity) (Object) this;
 
-
-        if(!entity.world.isClient && entity instanceof PlayerEntity && passenger instanceof PlayerEntity)
+        if(!entity.world.isClient && entity instanceof PlayerEntity)
             ((ServerPlayerEntity) entity).networkHandler.sendPacket(new EntityPassengersSetS2CPacket(entity));
     }
 
@@ -48,31 +39,15 @@ public abstract class EntityMixin
             ((ServerPlayerEntity)entity).networkHandler.sendPacket(new EntityPassengersSetS2CPacket(entity));
     }
 
-
-    /**
-     * @author ForwarD_NerN
-     * @reason To make passengers sit a little higher in first person
-     */
-    @Overwrite
-    private void updatePassengerPosition(Entity passenger, Entity.PositionUpdater positionUpdater) {
-        if (!this.hasPassenger(passenger)) return;
-
-        double d = this.getY() + this.getMountedHeightOffset() + passenger.getHeightOffset();
-
-        if(world.isClient)
-            d = getDOffset(passenger);
-
-
-        positionUpdater.accept(passenger, this.getX(), d, this.getZ());
+    @ModifyVariable(method = "updatePassengerPosition(Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/Entity$PositionUpdater;)V",
+            at = @At(value = "STORE"), ordinal = 0, require = 0)
+    private double offsetPassengersClientSide(double d, Entity passenger) {
+        return getWorld().isClient && passenger instanceof PlayerEntity ? d-getRidingOffset(passenger) : d;
     }
-
     @Environment(EnvType.CLIENT)
-    private double getDOffset(Entity passenger)
+    private double getRidingOffset(Entity passenger)
     {
         MinecraftClient mc = MinecraftClient.getInstance();
-        if(mc.options.getPerspective().isFirstPerson() && passenger instanceof PlayerEntity && passenger.getVehicle() == mc.player)
-            return this.getY() + this.getMountedHeightOffset();
-
-        return this.getY() + this.getMountedHeightOffset() + passenger.getHeightOffset();
+        return mc.options.getPerspective().isFirstPerson() && passenger.getVehicle() == mc.player ? passenger.getHeightOffset() : 0;
     }
 }

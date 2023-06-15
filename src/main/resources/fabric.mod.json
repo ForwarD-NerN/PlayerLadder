@@ -27,9 +27,8 @@
   ],
 
   "depends": {
-    "minecraft": ">=1.19.4",
-    "fabric": "*",
-    "java": ">=17"
+    "minecraft": "1.19.4",
+    "fabric": "*"
   },
   "suggests": {
     "another-mod": "*"
