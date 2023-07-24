@@ -15,7 +15,7 @@ public class PlayerMixin
     {
         Player entity = (Player) (Object) this;
 
-        if(!entity.level.isClientSide && entity.isVehicle() && entity.isCrouching() && entity.isOnGround())
+        if(!entity.level().isClientSide && entity.isVehicle() && entity.isCrouching() && entity.onGround())
             entity.getFirstPassenger().stopRiding();
     }
 }
