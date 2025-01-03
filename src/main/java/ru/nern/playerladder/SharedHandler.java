@@ -1,21 +1,33 @@
 package ru.nern.playerladder;
 
+import com.google.common.collect.Sets;
+import net.minecraft.ResourceLocationException;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.Saddleable;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import ru.nern.playerladder.config.ServerConfig;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 
 public class SharedHandler {
-    public static InteractionResult startRidingEntity(Player player, Entity newVehicle, Level level, InteractionHand hand) {
-        if(!level.isClientSide() && hand == InteractionHand.MAIN_HAND && canInteractWith(newVehicle) && player.getItemInHand(hand).isEmpty()) {
+    private static final Set<EntityType<?>> entityTypesToExclude = Sets.newHashSet();
+    private static final Set<TagKey<EntityType<?>>> entityTagsToExclude = Sets.newHashSet();
 
+    public static InteractionResult rideEntity(Player player, Entity newVehicle, Level level, InteractionHand hand) {
+        if(!level.isClientSide() && hand == InteractionHand.MAIN_HAND && canPickUpOrRideLiving(newVehicle) && player.getItemInHand(hand).isEmpty()) {
             Entity vehicle = getHighestOrSelf(newVehicle, player, ServerConfig.stepUpLimit);
+
             if(vehicle == null) return InteractionResult.FAIL;
             player.startRiding(vehicle);
 
@@ -25,9 +37,9 @@ public class SharedHandler {
     }
 
     public static InteractionResult pickUpEntity(Player player, Entity newPassenger, Level level, InteractionHand hand) {
-        if(!level.isClientSide() && hand == InteractionHand.MAIN_HAND && canInteractWith(newPassenger) && player.getItemInHand(hand).isEmpty()) {
-
+        if(!level.isClientSide() && hand == InteractionHand.MAIN_HAND && canPickUpOrRideLiving(newPassenger) && player.getItemInHand(hand).isEmpty()) {
             Entity vehicle = getHighestOrSelf(player, newPassenger, ServerConfig.pickUpLimit);
+
             if(vehicle == null) return InteractionResult.FAIL;
             newPassenger.startRiding(vehicle);
 
@@ -46,8 +58,14 @@ public class SharedHandler {
         return vehicle;
     }
 
-    private static boolean canInteractWith(Entity entity) {
-        return ServerConfig.interactWithAnyLiving && !(entity instanceof Saddleable) || entity instanceof Player;
+    private static boolean canPickUpOrRideLiving(Entity entity) {
+        if(entity instanceof Player) {
+            return ServerConfig.allowPlayers;
+        }
+
+        return ServerConfig.allowLivingEntities &&
+                !entityTypesToExclude.contains(entity.getType()) &&
+                entityTagsToExclude.stream().noneMatch(tag -> entity.getType().is(tag));
     }
 
     public static void onMount(Entity vehicle, Entity passenger) {
@@ -74,5 +92,34 @@ public class SharedHandler {
     public static void onGameModeChange(Player player) {
         if(player.isVehicle())
             player.getFirstPassenger().stopRiding();
+    }
+
+    private static void addExcludedEntityType(String entity) {
+        try {
+            Optional<EntityType<?>> type = EntityType.byString(entity);
+            type.ifPresent(entityTypesToExclude::add);
+        } catch (ResourceLocationException ignored) {}
+    }
+
+    private static void addExcludedEntityTag(String tag) {
+        try {
+            TagKey<EntityType<?>> tagKey = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse(tag.substring(1)));
+            entityTagsToExclude.add(tagKey);
+        } catch (ResourceLocationException ignored) {}
+    }
+
+    public static void setExcludedEntries(List<String> entries) {
+        entityTagsToExclude.clear();
+        entityTypesToExclude.clear();
+
+        for(String entry : entries) {
+            if(entry.isEmpty()) continue;
+
+            if(entry.startsWith("#")) {
+                SharedHandler.addExcludedEntityTag(entry);
+            }else{
+                SharedHandler.addExcludedEntityType(entry);
+            }
+        }
     }
 }

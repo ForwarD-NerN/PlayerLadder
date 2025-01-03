@@ -12,7 +12,7 @@ public class ClientConfig {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
     private static final ModConfigSpec.BooleanValue ALLOW_INTERACTIONS = BUILDER
-            .comment("If enabled, allows you to interact with mobs, blocks, when there's an entity on top of you.")
+            .comment("Allows interacting with the world while there's an entity on top of you.")
             .define("allowInteractions", true);
 
 

@@ -10,15 +10,21 @@
   "pickUpLimit.playerladder.description": "Limits how many entities a player can pick up.",
 
   "stepUpLimit.playerladder.config": "Step Up limit",
-  "stepUpLimit.playerladder.description": "Limits how many entities up a player can go if they click on an entity with passengers.",
+  "stepUpLimit.playerladder.description": "Limits how many entities up a player can go.",
 
-  "interactWithAnyLiving.playerladder.config": "Allow any Living Entity",
-  "interactWithAnyLiving.playerladder.description": "If enabled, allows you to ride or pick up any living entity, not just players.",
+  "allowLivingEntities.playerladder.config": "Allow living entities",
+  "allowLivingEntities.playerladder.description": "Allows riding or picking up any living entity.",
 
-  "rideExtension.playerladder.config": "/ride command extension",
+  "allowPlayers.playerladder.config": "Allow players",
+  "allowPlayers.playerladder.description": "Allows riding or picking up any player.",
+
+  "excludedLivingEntities.playerladder.config": "Excluded living entities",
+  "excludedLivingEntities.playerladder.description": "The list of living entities that can't be ridden/picked up. Supports entity tags e.g: #minecraft:dismounts_underwater",
+
+  "rideExtension.playerladder.config": "/ride extension",
   "rideExtension.playerladder.description": "Allows the /ride command to mount entities on top of players.",
 
   "client.playerladder.config": "Client",
-  "allowInteractions.playerladder.config": "Interact with the World",
-  "allowInteractions.playerladder.description": "If enabled, allows you to interact with mobs, blocks, when there's an entity on top of you."
+  "allowInteractions.playerladder.config": "Allow world interactions",
+  "allowInteractions.playerladder.description": "Allows interacting with the world while there's an entity on top of you."
 }

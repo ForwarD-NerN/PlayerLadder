@@ -33,7 +33,7 @@ public class PlayerLadder
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent.EntityInteract event) {
         event.setCancellationResult(switch (ServerConfig.mode) {
-            case RIDE -> SharedHandler.startRidingEntity(event.getEntity(), event.getTarget(), event.getLevel(), event.getHand());
+            case RIDE -> SharedHandler.rideEntity(event.getEntity(), event.getTarget(), event.getLevel(), event.getHand());
             case PICK_UP -> SharedHandler.pickUpEntity(event.getEntity(), event.getTarget(), event.getLevel(), event.getHand());
             case DO_NOTHING -> InteractionResult.PASS;
         });
