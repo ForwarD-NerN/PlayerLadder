@@ -13,8 +13,7 @@ public class RideCommandMixin {
 
     @Redirect(method = "mount",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getType()Lnet/minecraft/world/entity/EntityType;"))
-    private static EntityType<?> playerladder$rideExtension(Entity entity)
-    {
-        return PlayerLadder.CONFIG.server.rideExtension ? null : entity.getType();
+    private static EntityType<?> playerladder$rideExtension(Entity entity) {
+        return PlayerLadder.config().server.rideExtension ? null : entity.getType();
     }
 }
