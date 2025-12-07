@@ -13,6 +13,6 @@ import ru.nern.playerladder.SharedHandler;
 public class ServerPlayerMixin {
     @Inject(method = "setGameMode", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;send(Lnet/minecraft/network/protocol/Packet;)V", shift = At.Shift.AFTER))
     private void playerladder$onGameModeChange(GameType gameType, CallbackInfoReturnable<Boolean> cir) {
-        SharedHandler.onGameModeChange((Player) (Object) this);
+        SharedHandler.onGameModeChange((Player) (Object) this, gameType);
     }
 }

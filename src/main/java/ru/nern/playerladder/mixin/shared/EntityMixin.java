@@ -24,14 +24,10 @@ public class EntityMixin {
     }
 
     @WrapOperation(
-            method = "startRiding(Lnet/minecraft/world/entity/Entity;Z)Z",
+            method = "startRiding(Lnet/minecraft/world/entity/Entity;ZZ)Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/EntityType;canSerialize()Z")
     )
     private boolean playerladder$allowRidingPlayers(EntityType instance, Operation<Boolean> original) {
-        if(instance == EntityType.PLAYER) {
-            return true;
-        }else{
-            return original.call(instance);
-        }
+        return instance == EntityType.PLAYER || original.call(instance);
     }
 }

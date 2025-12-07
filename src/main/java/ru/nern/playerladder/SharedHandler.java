@@ -70,18 +70,18 @@ public class SharedHandler {
     }
 
     public static void onMount(Entity vehicle, Entity passenger) {
-        if(!vehicle.level().isClientSide && vehicle instanceof Player) {
+        if(!vehicle.level().isClientSide() && vehicle instanceof Player) {
             ((ServerPlayer)vehicle).connection.send(new ClientboundSetPassengersPacket(vehicle));
         }
     }
 
     public static void onDismount(Entity vehicle) {
-        if(!vehicle.level().isClientSide && vehicle instanceof Player)
+        if(!vehicle.level().isClientSide() && vehicle instanceof Player)
             ((ServerPlayer) vehicle).connection.send(new ClientboundSetPassengersPacket(vehicle));
     }
 
     public static void onPlayerTick(Player player) {
-        if(!player.level().isClientSide && player.onGround() && player.isVehicle() && player.isCrouching())
+        if(!player.level().isClientSide() && player.onGround() && player.isVehicle() && player.isCrouching())
             player.getFirstPassenger().stopRiding();
     }
 
@@ -90,8 +90,8 @@ public class SharedHandler {
             player.stopRiding();
     }
 
-    public static void onGameModeChange(Player player) {
-        if(player.isVehicle() && (config().server.dismountOnGameModeChange || player.gameMode() == GameType.SPECTATOR))
+    public static void onGameModeChange(Player player, GameType gameMode) {
+        if(player.isVehicle() && (config().server.dismountOnGameModeChange || gameMode == GameType.SPECTATOR))
             player.getFirstPassenger().stopRiding();
     }
 
