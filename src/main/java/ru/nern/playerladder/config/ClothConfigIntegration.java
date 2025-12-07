@@ -46,6 +46,10 @@ public class ClothConfigIntegration {
                 .setTooltip(Component.translatable("allowLivingEntities.playerladder.description"))
                 .setSaveConsumer(value -> config().server.interactWithAnyLiving = value).build());
 
+        serverCategory.addEntry(entryBuilder.startBooleanToggle(Component.translatable("dismountOnGameModeChange.playerladder.config"), config().server.dismountOnGameModeChange)
+                .setTooltip(Component.translatable("dismountOnGameModeChange.playerladder.description"))
+                .setSaveConsumer(value -> config().server.dismountOnGameModeChange = value).build());
+
         serverCategory.addEntry(entryBuilder.startStrList(Component.translatable("excludedLivingEntities.playerladder.config"), config().server.excludedLivingEntities)
                 .setTooltip(Component.translatable("excludedLivingEntities.playerladder.description"))
                 .setDisplayRequirement(Requirement.isTrue(() -> config().server.interactWithAnyLiving))

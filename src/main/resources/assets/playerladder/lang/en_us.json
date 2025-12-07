@@ -15,6 +15,9 @@
   "allowLivingEntities.playerladder.config": "Allow living entities",
   "allowLivingEntities.playerladder.description": "Allows riding or picking up any living entity.",
 
+  "dismountOnGameModeChange.playerladder.config": "Dismount on Game Mode change",
+  "dismountOnGameModeChange.playerladder.description": "Whether entities should be dismounted from a player when the player's game mode changes.",
+
   "allowPlayers.playerladder.config": "Allow players",
   "allowPlayers.playerladder.description": "Allows riding or picking up any player.",
 

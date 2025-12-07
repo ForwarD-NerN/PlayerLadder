@@ -90,7 +90,7 @@ public class SharedHandler {
     }
 
     public static void onGameModeChange(Player player) {
-        if(player.isVehicle())
+        if(config().server.dismountOnGameModeChange && player.isVehicle())
             player.getFirstPassenger().stopRiding();
     }
 
