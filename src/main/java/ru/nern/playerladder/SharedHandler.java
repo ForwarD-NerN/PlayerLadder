@@ -12,6 +12,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -90,7 +91,7 @@ public class SharedHandler {
     }
 
     public static void onGameModeChange(Player player) {
-        if(config().server.dismountOnGameModeChange && player.isVehicle())
+        if(player.isVehicle() && (config().server.dismountOnGameModeChange || player.gameMode() == GameType.SPECTATOR))
             player.getFirstPassenger().stopRiding();
     }
 

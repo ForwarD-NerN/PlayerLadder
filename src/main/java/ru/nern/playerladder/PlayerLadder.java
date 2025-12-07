@@ -63,10 +63,10 @@ public class PlayerLadder implements ModInitializer {
 			public int stepUpLimit = 16;
 			public boolean interactWithAnyLiving = false;
 			public boolean allowPlayers = true;
-			public boolean dismountOnGameModeChange = true;
+			public boolean dismountOnGameModeChange = false;
 
 			@ValidateField(ExcludedLivingEntitiesValidator.class)
-			public List<String> excludedLivingEntities = List.of("minecraft:wither", "minecraft:ender_dragon", "minecraft:minecart", "#minecraft:boat", "#minecraft:dismounts_underwater");
+			public List<String> excludedLivingEntities = List.of("minecraft:wither", "minecraft:ender_dragon", "minecraft:warden", "minecraft:minecart", "#minecraft:boat", "#minecraft:dismounts_underwater");
 
 			public boolean rideExtension = true;
 		}
