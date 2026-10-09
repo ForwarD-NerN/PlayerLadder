@@ -2,8 +2,10 @@ package ru.nern.playerladder.mixin.shared;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,7 +29,7 @@ public class EntityMixin {
             method = "startRiding(Lnet/minecraft/world/entity/Entity;ZZ)Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/EntityType;canSerialize()Z")
     )
-    private boolean playerladder$allowRidingPlayers(EntityType instance, Operation<Boolean> original) {
-        return instance == EntityType.PLAYER || original.call(instance);
+    private boolean playerladder$allowRidingPlayers(EntityType instance, Operation<Boolean> original, @Local(argsOnly = true) Entity vehicle) {
+        return vehicle instanceof Player || original.call(instance);
     }
 }

@@ -1,10 +1,11 @@
 package ru.nern.playerladder;
 
 import com.google.common.collect.Sets;
-import net.minecraft.ResourceLocationException;
+import net.minecraft.IdentifierException;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
@@ -66,7 +67,7 @@ public class SharedHandler {
 
         return config().server.interactWithAnyLiving &&
                 !entityTypesToExclude.contains(entity.getType()) &&
-                entityTagsToExclude.stream().noneMatch(tag -> entity.getType().is(tag));
+                entityTagsToExclude.stream().noneMatch(tag -> entity.is(tag));
     }
 
     public static void onMount(Entity vehicle, Entity passenger) {
@@ -97,16 +98,16 @@ public class SharedHandler {
 
     private static void addExcludedEntityType(String entity) {
         try {
-            Optional<EntityType<?>> type = EntityType.byString(entity);
+            Optional<EntityType<?>> type = BuiltInRegistries.ENTITY_TYPE.getOptional(Identifier.parse(entity));
             type.ifPresent(entityTypesToExclude::add);
-        } catch (ResourceLocationException ignored) {}
+        } catch (IdentifierException ignored) {}
     }
 
     private static void addExcludedEntityTag(String tag) {
         try {
-            TagKey<EntityType<?>> tagKey = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse(tag.substring(1)));
+            TagKey<EntityType<?>> tagKey = TagKey.create(Registries.ENTITY_TYPE, Identifier.parse(tag.substring(1)));
             entityTagsToExclude.add(tagKey);
-        } catch (ResourceLocationException ignored) {}
+        } catch (IdentifierException ignored) {}
     }
 
     public static void setExcludedEntries(List<String> entries) {
