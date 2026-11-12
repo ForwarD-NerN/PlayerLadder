@@ -7,9 +7,13 @@
 	"authors": [
 		"ForwarD NerN"
 	],
+	"contributors": [
+		"Zekcya"
+	],
 	"contact": {
-		"homepage": "https://modrinth.com/mod/player-ladder",
-		"sources": "https://github.com/ForwarD-NerN/PlayerLadder"
+		"homepage": "https://modrinth.com/project/playerladder",
+		"sources": "https://github.com/Zekcya/PlayerLadder",
+		"issues": "https://github.com/Zekcya/PlayerLadder/issues"
 	},
 	"license": "MIT",
 	"icon": "assets/playerladder/playerladder.png",
@@ -27,7 +31,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.18.4",
-		"minecraft": ">=26.1 <26.4",
+		"minecraft": ">=26.1 <26.5",
 		"java": ">=25",
 		"fabric-api": "*",
 		"fconfiglib": ">=1.1.1"
